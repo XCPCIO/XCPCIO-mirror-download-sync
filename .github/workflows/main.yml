@@ -1,0 +1,19 @@
+name: Sync
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 21 * * *'
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Sync
+        uses: appleboy/ssh-action@master # 使用ssh链接服务器
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: | 
+            ${{ secrets.RUN_SCRIPT }}
