@@ -1,4 +1,5 @@
 #! /bin/bash
+# You need to ensure that jq is installed before using this script.
 
 dirname=mirror-download
 downloadlist=downloadlist.json
@@ -18,7 +19,6 @@ else
 fi
 
 wget https://mirror-download.xcpcio.com/downloadlist.json
-sudo apt-get install jq
 
 arr=( $(jq -r '.' $downloadlist) )
 
