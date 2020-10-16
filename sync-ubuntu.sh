@@ -11,7 +11,6 @@ else
     echo $dirname exist
 fi
 
-
 if [ ! -f $downloadlist ];then
     continue
 else
@@ -24,11 +23,30 @@ arr=( $(jq -r '.' $downloadlist) )
 
 cd $dirname
 
+fileNameListCnt=0
+fileNameList=()
+
+# download
 for (( i = 1; i + 1 < ${#arr[@]}; i += 2))
 do
     key=${arr[i]:1:${#arr[i]} - 3}
     value=${arr[i + 1]:1:${#arr[i + 1]} - 3}
+    fileNameList[$fileNameListCnt]=$key
+    ((fileNameListCnt++))
     if [ ! -f $key ];then
         wget -O $key $value
+    fi
+done
+
+# delete
+for file in *
+do
+    if test -f $file
+    then
+        if [[ ! " ${fileNameList[@]} " =~ " ${file} " ]]; then
+            echo $file deleting...
+            rm $file
+            echo $file deleted successfully! 
+        fi
     fi
 done
